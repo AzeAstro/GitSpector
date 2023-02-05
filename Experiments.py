@@ -118,6 +118,7 @@ def investigate(REPOURL):
 					detailedPatches.append(detailedPatch)
 					detailedPatch.printInfo()
 			index+=1
+		save(REPONAME,REPOURL,detailedPatches)
 	except KeyboardInterrupt:
 		print("Canceled by user.")
 		save(REPONAME,REPOURL,detailedPatches)
