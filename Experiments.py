@@ -8,9 +8,10 @@ from sys import exit
 
 
 # NEED TO ADD:
-# 1) Multiple page of commits
-# 2) Whole person scanner
-# 3) Ligma ballz suckers!
+# 1) Multiple page of commits - Done!
+# 2) Branch selector
+# 3) Whole person scanner
+# 4) Ligma ballz suckers!
 
 
 
@@ -36,7 +37,8 @@ class patch:
 			
 
 
-def save(REPONAME,REPOURL,detailedPatches):
+def save(REPOURL:str,detailedPatches:list):
+	REPONAME=REPOURL.replace("https://github.com/","")
 	if detailedPatches==[]:
 		print("Nothing to save. Shutting down.\nSee you later!")
 	else:
@@ -64,27 +66,25 @@ def save(REPONAME,REPOURL,detailedPatches):
 			print("Have a nice day!")
 
 
-def investigate(REPOURL):
+def analyzeBranch(REPOURL:str):
+	return "master"
+
+
+def pageLoop(commitHtml:str):
+	results=[]
+	olderPage,returned=analyzeCommitPage(commitHtml)
+	while True:
+		if olderPage==False:
+			results+=returned
+			break
+		else:
+			results+=returned
+			commitHtml=requests.get(olderPage).text
+			olderPage,returned=analyzeCommitPage(commitHtml)
+	return results
+
+def analyzeCommitPage(commitHtml:str):
 	try:
-		REPONAME=REPOURL.replace('https://github.com/','')
-		print(f"Starting repo analyze for {REPONAME}")
-
-		repoHtml=requests.get(REPOURL).text
-		mainSoup=BeautifulSoup(repoHtml, 'html.parser')
-
-
-		spanlist=mainSoup.find_all('span',attrs={'class':'css-truncate-target'})
-		branch=""
-		for span in spanlist:
-			if span.get("data-menu-button")!=None:
-				branch=span.text
-				print(f"Searching for branch {branch}")
-	except KeyboardInterrupt:
-		print("Exitting. Nothing to display or save.")
-		exit()
-
-	try:
-		commitHtml=requests.get(f"{REPOURL}/commits/{branch}").text
 		commitSoup=BeautifulSoup(commitHtml,'html.parser')
 		commitBtns=commitSoup.find_all("a",{'class':'tooltipped tooltipped-sw btn-outline btn BtnGroup-item text-mono f6'})
 		commitAuthors=[]
@@ -118,10 +118,28 @@ def investigate(REPOURL):
 					detailedPatches.append(detailedPatch)
 					detailedPatch.printInfo()
 			index+=1
-		save(REPONAME,REPOURL,detailedPatches)
+
+
+		olderPage=False
+
+		tagAs=commitSoup.find_all("a",{'class':'btn btn-outline BtnGroup-item','rel':'nofollow'})
+		for tag in tagAs:
+			if tag.text=="Older":
+				olderPage=tag.get("href")
+		return olderPage,detailedPatches
 	except KeyboardInterrupt:
 		print("Canceled by user.")
-		save(REPONAME,REPOURL,detailedPatches)
+		return False,detailedPatches
+
+
+
+def investigate(REPOURL):
+	branch=analyzeBranch(REPOURL)
+	commitHtml=requests.get(f"{RepoURL}/commits/{branch}").text
+	results=pageLoop(commitHtml)
+	save(REPOURL,results)
+
+
 
 if __name__=="__main__":
 	from pyfiglet import Figlet
