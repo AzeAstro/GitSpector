@@ -1,17 +1,25 @@
+
+
+# THIS FILE IS NOT FOR YOU!!!
+# NOW GET REKT,BITCH
+# IT IS SAME SHIT AS IN INSPECTOR.PY
+
+
+
 import requests
 from bs4 import BeautifulSoup
 from json import dump
 from time import time_ns
-from sys import exit
 
 
 
 
 # NEED TO ADD:
 # 1) Multiple page of commits - Done!
-# 2) Branch selector
+# 2) Branch selector - Done!
 # 3) Whole person scanner
-# 4) Ligma ballz suckers!
+# 4) Async version
+# 5) Ligma ballz suckers!
 
 
 
@@ -67,7 +75,30 @@ def save(REPOURL:str,detailedPatches:list):
 
 
 def analyzeBranch(REPOURL:str):
-	return "master"
+	repoHtml=requests.get(REPOURL).text
+	branchSoup=BeautifulSoup(repoHtml, 'html.parser')
+
+	spanlist=branchSoup.find_all('span',attrs={'class':'css-truncate-target'})
+	defaultBranch=""
+	for span in spanlist:
+		if span.get("data-menu-button")!=None:
+			defaultBranch=span.text
+
+	while True:
+		try:
+			branch=input(f"Enter the branch name(detected default: {defaultBranch}):\n>>>")
+			if branch.split()==[]:
+				return defaultBranch
+			else:
+				if requests.get(f"{REPOURL}/tree/{branch}").status_code==200:
+					print(f"Valid branch: {branch}\n")
+					return branch
+				else:
+					print("Invalid branch.\n")
+		except KeyboardInterrupt:
+			print("Canceled by user.")
+			return False
+
 
 
 def pageLoop(commitHtml:str):
@@ -82,6 +113,8 @@ def pageLoop(commitHtml:str):
 			commitHtml=requests.get(olderPage).text
 			olderPage,returned=analyzeCommitPage(commitHtml)
 	return results
+
+
 
 def analyzeCommitPage(commitHtml:str):
 	try:
@@ -133,11 +166,18 @@ def analyzeCommitPage(commitHtml:str):
 
 
 
+
+
 def investigate(REPOURL):
 	branch=analyzeBranch(REPOURL)
-	commitHtml=requests.get(f"{RepoURL}/commits/{branch}").text
-	results=pageLoop(commitHtml)
-	save(REPOURL,results)
+	if branch==False:
+		print("Have a nice day!")
+	else:
+		commitHtml=requests.get(f"{RepoURL}/commits/{branch}").text
+		results=pageLoop(commitHtml)
+		save(REPOURL,results)
+
+
 
 
 
