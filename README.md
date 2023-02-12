@@ -16,8 +16,9 @@ I dunno. Ligma?
 
 ## Let's say I need to use it. Howtf am I gonna use it?
 So, uhm... You just run script,enter repository URL and that is it?  
-> `python Inspector.py`
-
+```cmd
+python Inspector.py
+```
 Done?
 
 ## How to install this shit?
@@ -27,11 +28,14 @@ Requirements:
 3) Requests
 
 Either use 
-> `pip install beautifulsoup4 requests` 
+``` cmd
+pip install beautifulsoup4 requests
+```
 
 or 
-
-> `pip install -r requirements.txt`
+```cmd
+pip install -r requirements.txt
+```
 
 
 ## Any special tips for usage maybe?
