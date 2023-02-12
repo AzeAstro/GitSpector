@@ -59,4 +59,5 @@ NO FUCKING CONTRIBUTIONS NEEDED! I WILL DO EVERYTHING ON MY OWN. GO LIG UR OWN B
 WRITE MY FUCKING NAME AT ITS README. DON'T BE LIKE FATHERLESS GITHUB USERS.  
 BE A CHAD
 
-![gigaChadImage](https://upload.wikimedia.org/wikipedia/ru/9/94/%D0%93%D0%B8%D0%B3%D0%B0%D1%87%D0%B0%D0%B4.jpg)
+
+<img src="https://upload.wikimedia.org/wikipedia/ru/9/94/%D0%93%D0%B8%D0%B3%D0%B0%D1%87%D0%B0%D0%B4.jpg" width=30%>
