@@ -1,3 +1,5 @@
+# DEPRECATED  
+
 # GitSpector
 GitSpector(or GitInspector) is a tool for finding emails from a GitHub repository. ***100% success is not guaranteed!!!***
   
